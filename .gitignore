@@ -1,0 +1,4 @@
+*.o
+*.exe
+matrixop.out
+.DS_Store
