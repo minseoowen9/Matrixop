@@ -6,7 +6,7 @@
 #include <string.h>
 
 int read_matrix(int* matrix, int row, int col) {
-    char buf[16];
+    char buf[256];
     int index = 0;
 
     for (int i = 0; i < row; i++) {

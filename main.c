@@ -76,10 +76,10 @@ void mult_mode() {
     while(col_b <= 0) {
         printf("input must be greater than zero\n");
         printf("B column:");
-        scanf("%i",&col_b);
+        scanf("%i\n",&col_b);
     }
 
-    int* matrix_b = malloc(sizeof (int) * row_b);
+    int* matrix_b = malloc(sizeof (int) * row_b*col_b);
     while(1) {
         if(!read_matrix(matrix_b,row_b,col_b)) {
             break;
