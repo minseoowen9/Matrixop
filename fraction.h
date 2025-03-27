@@ -5,10 +5,14 @@
 #ifndef MATRIXOP_FRACTION_H
 #define MATRIXOP_FRACTION_H
 
+//represents n/m
 typedef struct Fraction {
-    int f[2];
+    int n;
+    int m;
 } frac_t;
 
+void fr_add(frac_t* dest, frac_t* toAdd);
+void fr_multiply(frac_t* dest, frac_t* toMult);
 
 
 #endif //MATRIXOP_FRACTION_H

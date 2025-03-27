@@ -8,7 +8,21 @@ void mult_mode();
 void inv_mode();
 void gauss_mode();
 
+
+//int ggT(int a, int b) {
+//    int r1 = a < 0 ? -a: a;
+//    int r2 = b < 0 ? -b: b;
+//    while(r2) {
+//        int temp = r2;
+//        r2 = r1 % r2;
+//        r1 = temp;
+//    }
+//    return r1;
+//}
 int main(int argc, char** argv) {
+//    int a = -7;
+//    int b = 4;
+//    printf("ggt zwischen %i und %i: %i\n",a,b, ggT(a,b));
     printf("Welcome to Matrixop! Which Matrix operation do you want to see?\n");
 
     while(1) {
