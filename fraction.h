@@ -13,6 +13,7 @@ typedef struct Fraction {
 
 void fr_add(frac_t* dest, frac_t* toAdd);
 void fr_multiply(frac_t* dest, frac_t* toMult);
+void print_frac(frac_t fr);
 
 
 #endif //MATRIXOP_FRACTION_H

@@ -2,7 +2,7 @@ CC = gcc
 
 all: matrixop
 
-matrixop: main.o matrix.o
+matrixop: main.o fraction.o matrix.o
 	$(CC) $^ -o $@
 
 %.o: %.c

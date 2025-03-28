@@ -70,7 +70,7 @@ void mult_mode() {
     }
     printf("matrix A:\n");
     getchar();
-    int* matrix_a = malloc(sizeof (int)*row_a*col_a);
+    frac_t * matrix_a = malloc(sizeof (frac_t)*row_a*col_a);
 
     while(1) {
         if(!read_matrix(matrix_a,row_a,col_a)) {
@@ -93,7 +93,7 @@ void mult_mode() {
         scanf("%i\n",&col_b);
     }
 
-    int* matrix_b = malloc(sizeof (int) * row_b*col_b);
+    frac_t * matrix_b = malloc(sizeof (frac_t) * row_b*col_b);
     while(1) {
         if(!read_matrix(matrix_b,row_b,col_b)) {
             break;
@@ -101,10 +101,13 @@ void mult_mode() {
     }
     matrix_t* B = initialize_matrix(row_b,col_b,matrix_b);
     free(matrix_b);
-
+    printf("\n\n\n");
     matrix_t * res = initialize_matrix(row_a,col_b,NULL);
+    print_matrix(A);
+    printf("*\n");
+    print_matrix(B);
     matrix_multiply(res,A,B);
-    printf("result:\n");
+    printf("=\n");
     print_matrix(res);
 
     free_matrix(res);
