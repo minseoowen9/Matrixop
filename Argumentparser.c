@@ -9,7 +9,7 @@
 
 int isNumber(char* str) {
     regex_t reg;
-    if(regcomp(&reg,"^[0-9]+$",REG_EXTENDED)) {
+    if(regcomp(&reg,"^-?[0-9]+$",REG_EXTENDED)) {
         printf("regex init fail");
         exit(EXIT_FAILURE);
     }
@@ -22,7 +22,7 @@ int isNumber(char* str) {
 
 int isFraction(char* str) {
     regex_t reg;
-    if(regcomp(&reg,"^[0-9]+/[1-9][0-9]*$",REG_EXTENDED)) {
+    if(regcomp(&reg,"^-?[0-9]+/[1-9][0-9]*$",REG_EXTENDED)) {
         printf("regex init fail");
         exit(EXIT_FAILURE);
     }

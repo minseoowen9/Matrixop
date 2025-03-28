@@ -57,15 +57,15 @@ void mult_mode() {
     }
     printf("matrix A:\n");
     getchar();
-    frac_t * matrix_a = malloc(sizeof (frac_t)*row_a*col_a);
+    frac_t * input_a = malloc(sizeof (frac_t)*row_a*col_a);
 
     while(1) {
-        if(!read_matrix(matrix_a,row_a,col_a)) {
+        if(!read_matrix(input_a,row_a,col_a)) {
             break;
         }
     }
-    matrix_t* A = initialize_matrix(row_a,col_a,matrix_a);
-    free(matrix_a);
+    matrix_t* A = initialize_matrix(row_a,col_a,input_a);
+    free(input_a);
 
 
     while(row_b != col_a) {
@@ -80,14 +80,14 @@ void mult_mode() {
         scanf("%i\n",&col_b);
     }
 
-    frac_t * matrix_b = malloc(sizeof (frac_t) * row_b*col_b);
+    frac_t * input_b = malloc(sizeof (frac_t) * row_b*col_b);
     while(1) {
-        if(!read_matrix(matrix_b,row_b,col_b)) {
+        if(!read_matrix(input_b,row_b,col_b)) {
             break;
         }
     }
-    matrix_t* B = initialize_matrix(row_b,col_b,matrix_b);
-    free(matrix_b);
+    matrix_t* B = initialize_matrix(row_b,col_b,input_b);
+    free(input_b);
     printf("\n\n\n");
     matrix_t * res = initialize_matrix(row_a,col_b,NULL);
     print_matrix(A);
