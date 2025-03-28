@@ -24,9 +24,8 @@ void fr_add(frac_t * dest, frac_t * toAdd) {
 
     dest->n = new_n / ggt;
     dest->m = new_m / ggt;
-
 }
-
+//intuition: dest *= toAdd
 void fr_multiply(frac_t* dest, frac_t* toMult) {
     int new_n = dest->n * toMult->n;
     int new_m = dest->m * toMult->m;

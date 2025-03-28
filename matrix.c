@@ -120,6 +120,9 @@ void printAdditional_whitespaces(int x) {
     }
 }
 
+/**TODO: add callback function in parameter for printing gauss steps.
+ * Idea: function pointer that takes array of int, representing array of rows being computed
+ * in the gauss algorithm**/
 void print_matrix(matrix_t* mat) {
     frac_t ** matrix = mat->matrix;
     int maxstrlen = get_maxstrlen(mat);

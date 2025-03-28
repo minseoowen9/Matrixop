@@ -2,27 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Argumentparser.c"
-#include "matrix.h"
+#include "gauss.h"
 
 void mult_mode();
 void inv_mode();
 void gauss_mode();
 
-
-//int ggT(int a, int b) {
-//    int r1 = a < 0 ? -a: a;
-//    int r2 = b < 0 ? -b: b;
-//    while(r2) {
-//        int temp = r2;
-//        r2 = r1 % r2;
-//        r1 = temp;
-//    }
-//    return r1;
-//}
 int main(int argc, char** argv) {
-//    int a = -7;
-//    int b = 4;
-//    printf("ggt zwischen %i und %i: %i\n",a,b, ggT(a,b));
+
     printf("Welcome to Matrixop! Which Matrix operation do you want to see?\n");
 
     while(1) {
@@ -120,5 +107,31 @@ void inv_mode() {
 }
 
 void gauss_mode() {
+    printf("input matrix:\n");
+    int row = 0;
+    int col = 0;
 
+    while(row <= 0) {
+        printf("input must be greater than zero\n");
+        printf("row:");
+        scanf("%i",&row);
+    }
+    while(col <= 0) {
+        printf("input must be greater than zero\n");
+        printf("column:");
+        scanf("%i",&col);
+    }
+    getchar();
+
+    frac_t * inputarr = malloc(sizeof (frac_t)*row*col);
+
+    while(1) {
+        if(!read_matrix(inputarr,row,col)) {
+            break;
+        }
+    }
+    matrix_t* matrix = initialize_matrix(row,col,inputarr);
+    printf("Gauß:\n");
+    gauss(matrix);
+    free(matrix);
 }
