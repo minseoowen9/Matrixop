@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -g
 
 all: matrixop
 
-matrixop: main.o fraction.o matrix.o gauss.o
+matrixop: main.o fraction.o matrix.o output.o gauss.o
 	$(CC) $(CFLAGS) $^ -o $@
 
 %.o: %.c

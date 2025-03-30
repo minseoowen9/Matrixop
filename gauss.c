@@ -2,13 +2,16 @@
 // Created by Minseo Kim on 3/28/25.
 //
 #include "gauss.h"
+#include "output.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#define INITIAL -1
+#define END 0
 #define SWAP 1
 #define ROW_MULT 2
 #define ROW_ADD 3
-#define END 0
-#define INITIAL -1
+
 int mode_state = INITIAL;
 
 
@@ -54,7 +57,6 @@ int find_NonZeroRow(matrix_t* mat, int col,int row_start) {
  * **/
 void find_nextpivot(matrix_t* mat, int curr_piv[2]) {
     if(curr_piv[0] == mat->row-1 || curr_piv[1] == mat->col-1) {
-        printf("pivot is at edge of the matrix\n");
         curr_piv[0] = -2;
         curr_piv[1] = -2;
         return;
@@ -104,7 +106,7 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
         }
         printf("\n");
     }
-    printf("---------------------------\n");
+    print_divider(mat);
 }
 
 /**
@@ -126,8 +128,7 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
     int* rows_computed = (int*) calloc(mat->row, sizeof (int));
     printf("pivot:\n");
     print_frac(m[curr_piv[0]][curr_piv[1]]);
-    printf("\n");
-    printf("at: row %i col %i\n",piv_row+1,piv_col+1);
+    printf("\nat: row %i col %i\n",piv_row+1,piv_col+1);
 
     if(current_row != piv_row) { //swap (when our current row has zero value at non-zero column)
         mode_state = SWAP;
