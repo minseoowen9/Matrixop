@@ -87,19 +87,6 @@ void matrix_multiply(matrix_t* dest, matrix_t* A, matrix_t* B) {
     }
 }
 
-int frac_len(frac_t fr) {
-    char n[12];
-    char m[12];
-    sprintf(n,"%d",fr.n);
-    sprintf(m,"%d",fr.m);
-    if(fr.n == 0) { // 0/n => 0
-        return 1;
-    } else if(fr.m == 1) { // 100/1 => 100
-        return strlen(n);
-    }
-    return strlen(n) + strlen(m) + 1; // the fraction is represented in a/b, adding length for '/'
-}
-
 int get_maxstrlen(matrix_t* mat) {
     frac_t ** matr = mat->matrix;
     int maxlen = 0;
@@ -120,9 +107,6 @@ void printAdditional_whitespaces(int x) {
     }
 }
 
-/**TODO: add callback function in parameter for printing gauss steps.
- * Idea: function pointer that takes array of int, representing array of rows being computed
- * in the gauss algorithm**/
 void print_matrix(matrix_t* mat) {
     frac_t ** matrix = mat->matrix;
     int maxstrlen = get_maxstrlen(mat);

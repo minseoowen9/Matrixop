@@ -3,6 +3,7 @@
 //
 #include "fraction.h"
 #include <stdio.h>
+#include <string.h>
 
 //calculates gcd between a and b
 int ggT(int a, int b) {
@@ -43,4 +44,17 @@ void print_frac(frac_t fr) {
     } else {
         printf("%i/%i ",fr.n,fr.m);
     }
+}
+
+int frac_len(frac_t fr) {
+    char n[12];
+    char m[12];
+    sprintf(n,"%d",fr.n);
+    sprintf(m,"%d",fr.m);
+    if(fr.n == 0) { // 0/n => 0
+        return 1;
+    } else if(fr.m == 1) { // 100/1 => 100
+        return strlen(n);
+    }
+    return strlen(n) + strlen(m) + 1; // the fraction is represented in a/b, adding length for '/'
 }

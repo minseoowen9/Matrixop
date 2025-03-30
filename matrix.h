@@ -17,5 +17,7 @@ matrix_t* initialize_matrix(int row, int col, frac_t matrix[]);
 void free_matrix(matrix_t * mat);
 void print_matrix(matrix_t* mat);
 void matrix_multiply(matrix_t* dest, matrix_t* A, matrix_t* B);
+int get_maxstrlen(matrix_t* mat);
+void printAdditional_whitespaces(int x);
 
 #endif //MATRIXOP_MATRIX_H
