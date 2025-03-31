@@ -109,51 +109,64 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
     print_divider(mat);
 }
 
+void print_pivot(matrix_t * m,int row, int col) {
+    printf("pivot:\n");
+    print_frac(m[row][col]);
+    printf("\nat: row %i col %i\n",row+1,col+1);
+}
+
 /**
  * returns 0(END) if theres no more steps to compute, else macros defined above, which operation it has used
  * (for debug) logic: gauss_step is called when all of the element under curr_piv are zero and is about to operate the next step;
  * that is we are looking at a smaller matrix row:piv_row+1,...,row x col:piv_col+1,...,col
+ * Also sets the current mode(global variable mode_state): INITIAL,SWAP,ROW_MULT,ROW_ADD for program logic and debugging
  **/
 int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
+
+    // do not look for the next pivot if swap or row normalization has taken place
     if(mode_state == ROW_ADD || mode_state == INITIAL) {
         find_nextpivot(mat,curr_piv);
     }
-
+    //no more pivot=> end the operation
     if(curr_piv[0] == -2) {
         return END;
     }
+    //for readability
     int piv_row = curr_piv[0];
     int piv_col = curr_piv[1];
     frac_t ** m = mat->matrix;
     int* rows_computed = (int*) calloc(mat->row, sizeof (int));
-    printf("pivot:\n");
-    print_frac(m[curr_piv[0]][curr_piv[1]]);
-    printf("\nat: row %i col %i\n",piv_row+1,piv_col+1);
+
+    print_pivot(mat,piv_row,piv_col);
 
     if(current_row != piv_row) { //swap (when our current row has zero value at non-zero column)
+
         mode_state = SWAP;
-        printf("ROW SWAP\n");
         rows_computed[current_row] = 1;
         rows_computed[piv_row] = 1;
+        printf("ROW SWAP\n");
         print_gaussstep(mat,rows_computed,SWAP,curr_piv);
         free(rows_computed);
-
+        //compute matrix
         swapRow(mat,current_row,piv_row);
+        //the row of the current pivot element must be changed to the current row since these two rows are swapped
         curr_piv[0] = current_row;
+
         return SWAP;
     } else if(m[piv_row][piv_col].n != m[piv_row][piv_col].m) { //pivot non 1=> make it 1
+
         mode_state = ROW_MULT;
-        printf("ROW MULT\n");
         rows_computed[piv_row] = 1;
+        printf("ROW MULT\n");
         print_gaussstep(mat,rows_computed,ROW_MULT,curr_piv);
         free(rows_computed);
-
+        //compute matrix
         row_product(mat,piv_row,(frac_t) {.n= m[piv_row][piv_col].m, .m= m[piv_row][piv_col].n});
+
         return ROW_MULT;
+
     } else { //row addition
         mode_state = ROW_ADD;
-        printf("ROW ADDITION\n");
-
         //initialize rows_computed and print the matrix first before it is changed by rowAdd operation
         for(int i=piv_row+1;i<mat->row;i++) {
             if(m[i][piv_col].n == 0) {
@@ -161,6 +174,7 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
             }
             rows_computed[i] = 1;
         }
+        printf("ROW ADDITION\n");
         print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv);
         free(rows_computed);
 
@@ -175,7 +189,6 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
 
             rowAdd(mat,i,piv_row,mult_const);
         }
-
         return ROW_ADD;
     }
 }
