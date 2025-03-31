@@ -10,7 +10,7 @@ void inv_mode();
 void gauss_mode();
 void det_mode();
 
-int main(int argc, char** argv) {
+int main(void) {
 
     printf("Welcome to Matrixop! Which Matrix operation do you want to see?\n");
 

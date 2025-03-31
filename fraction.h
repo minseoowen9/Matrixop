@@ -11,8 +11,8 @@ typedef struct Fraction {
     int m;
 } frac_t;
 
-void fr_add(frac_t* dest, frac_t* toAdd);
-void fr_multiply(frac_t* dest, frac_t* toMult);
+void fr_add(frac_t* dest, frac_t toAdd);
+void fr_multiply(frac_t* dest, frac_t toMult);
 int frac_len(frac_t fr);
 void print_frac(frac_t fr);
 

@@ -7,10 +7,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-void save_mult(frac_t* saved_mult,int curr_index,frac_t tosave) {
-    saved_mult[curr_index] = tosave;
-}
-
 /**
  * param:
  * matrix* m in gauss Form,
@@ -21,15 +17,14 @@ void save_mult(frac_t* saved_mult,int curr_index,frac_t tosave) {
 void print_det_step(matrix_t* m,frac_t* saved_mult,int saved_multis) {
     frac_t result = {.n= (int) pow(-1,swap_num),.m=1};
     printf("Determinant = (-1)^(number of row swap operations) x all saved multiplying constant x product of all diagonal elements\n");
-    printf("=\n( %i )",result.n);
+    printf("=\n( -1 )^%i",swap_num);
 
     //print all saved multiplying constants
     for(int i=0;i<saved_multis;i++) {
         printf("*( ");
         print_frac(saved_mult[i]);
         printf(")");
-        frac_t mult = saved_mult[i];
-        fr_multiply(&result,&mult);
+        fr_multiply(&result,saved_mult[i]);
     }
 
     //print diagonal elements
@@ -37,8 +32,7 @@ void print_det_step(matrix_t* m,frac_t* saved_mult,int saved_multis) {
     print_frac(m->matrix[0][0]);
     printf(")");
     for(int i=1;i<m->row;i++) {
-        frac_t mult = m->matrix[i][i];
-        fr_multiply(&result,&mult);
+        fr_multiply(&result,m->matrix[i][i]);
         printf("*( ");
         print_frac(m->matrix[i][i]);
         printf(")");
@@ -63,7 +57,7 @@ void determinant(matrix_t* mat) {
             printf("\nSAVE MULTIPLYING CONSTANT: ");
             print_frac(curr_mult);
             printf("\n");
-            save_mult(saved_mult,saveIndex++,curr_mult);
+            saved_mult[saveIndex++] = curr_mult;
         }
     }
     print_matrix(mat);

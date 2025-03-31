@@ -80,9 +80,8 @@ void matrix_multiply(matrix_t* dest, matrix_t* A, matrix_t* B) {
         for(int j=0; j < dest->col;j++) {
             for(int k=0; k< A->col;k++) {
                 frac_t a_ik = a[i][k];
-                frac_t b_kj = b[k][j];
-                fr_multiply(&a_ik,&b_kj); // a[i][k]*b[k][j]
-                fr_add(&ab[i][j], &a_ik);
+                fr_multiply(&a_ik,b[k][j]); // a[i][k]*b[k][j]
+                fr_add(&ab[i][j], a_ik);
             }
         }
     }

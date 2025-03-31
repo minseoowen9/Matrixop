@@ -30,15 +30,15 @@ void rowAdd(matrix_t* mat, int dest_row,int mult_row, frac_t mult) { // dest_row
     frac_t ** m = mat->matrix;
     for(int i=0;i<mat->col;i++) {
         frac_t mult_elem = m[mult_row][i];
-        fr_multiply(&mult_elem,&mult);
-        fr_add(&m[dest_row][i],&mult_elem);
+        fr_multiply(&mult_elem,mult);
+        fr_add(&m[dest_row][i],mult_elem);
     }
 }
 
 void row_product(matrix_t* mat, int row, frac_t mult) { // just row * mult(scalar)
     frac_t ** m = mat->matrix;
     for(int i=0;i<mat->col;i++) {
-        fr_multiply(&m[row][i],&mult);
+        fr_multiply(&m[row][i],mult);
     }
 }
 
@@ -102,8 +102,7 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
 
             if(mode == ROW_ADD) {
                 frac_t target = m[i][curr_piv[1]];
-                frac_t minus = {.n=-1,.m=1};
-                fr_multiply(&target,&minus);
+                fr_multiply(&target,(frac_t){.n=-1,.m=1});
                 print_frac(target);
                 printf("*row%i",curr_piv[0]+1);
             }
@@ -189,8 +188,7 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
                 continue;
             }
             frac_t mult_const = m[i][piv_col];
-            frac_t minus = {.n= -1, .m= 1};
-            fr_multiply(&mult_const,&minus);
+            fr_multiply(&mult_const,(frac_t){.n= -1, .m= 1});
 
             rowAdd(mat,i,piv_row,mult_const);
         }
@@ -258,8 +256,7 @@ void reduced_gauss(matrix_t* mat) {
                 continue;
             }
             frac_t mult_const = m[i][pivot_col];
-            frac_t minus = {.n= -1, .m= 1};
-            fr_multiply(&mult_const,&minus);
+            fr_multiply(&mult_const,(frac_t) {.n= -1, .m= 1});
 
             rowAdd(mat,i,curr_row,mult_const);
         }
