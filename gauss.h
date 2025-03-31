@@ -14,6 +14,7 @@
 
 int swap_num;
 int mode_state;
+frac_t curr_mult;
 
 void swapRow(matrix_t* mat, int r1, int r2);
 void rowAdd(matrix_t* mat, int dest_row,int mult_row, frac_t mult);

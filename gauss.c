@@ -14,6 +14,7 @@
 
 int mode_state = INITIAL;
 int swap_num = 0;
+frac_t curr_mult = {.n=1,.m=1};
 
 
 void swapRow(matrix_t* mat, int r1, int r2) {
@@ -95,6 +96,8 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
                 frac_t pivot_val = m[curr_piv[0]][curr_piv[1]];
                 frac_t mult = {.n= pivot_val.m, .m= pivot_val.n};
                 print_frac(mult);
+                //save the multiplying constant for determinant
+                curr_mult = pivot_val;
             }
 
             if(mode == ROW_ADD) {
@@ -108,7 +111,6 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
         printf("\n");
     }
     print_divider(mat);
-    printf("|\nV\n");
 }
 
 void print_pivot(matrix_t * m,int row, int col) {
