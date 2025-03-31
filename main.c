@@ -7,6 +7,7 @@
 void mult_mode();
 void inv_mode();
 void gauss_mode();
+void det_mode();
 
 int main(int argc, char** argv) {
 
@@ -14,7 +15,7 @@ int main(int argc, char** argv) {
 
     while(1) {
         printf("Press the number for the mode:\n");
-        printf("1 Matrix multiplication \n2 Matrix Inversion\n3 Gauß-Algorithm\n");
+        printf("1 Matrix multiplication\n2 Gauß-Algorithm\n3 Determinant\n4 Matrix Inversion\n");
         printf("press Q and Enter to end\n");
         char res[2];
         scanf("%1s",res);
@@ -25,10 +26,13 @@ int main(int argc, char** argv) {
             mult_mode();
         }
         else if (!strncmp(res,"2",1)) {
-            inv_mode();
+            gauss_mode();
         }
         else if (!strncmp(res,"3",1)) {
-            gauss_mode();
+            det_mode();
+        }
+        else if (!strncmp(res,"4",1)) {
+            inv_mode();
         }
         else {
             printf("Wrong input, try again\n");
@@ -102,10 +106,6 @@ void mult_mode() {
     free_matrix(B);
 }
 
-void inv_mode() {
-
-}
-
 void gauss_mode() {
     printf("input matrix:\n");
     int row = 0;
@@ -133,5 +133,13 @@ void gauss_mode() {
     matrix_t* matrix = initialize_matrix(row,col,inputarr);
     printf("Gauß:\n");
     gauss(matrix);
-    free(matrix);
+    free_matrix(matrix);
+}
+
+void det_mode() {
+    printf("Coming soon!\n");
+}
+
+void inv_mode() {
+    printf("Coming soon!\n");
 }
