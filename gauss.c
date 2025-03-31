@@ -101,17 +101,18 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
                 frac_t minus = {.n=-1,.m=1};
                 fr_multiply(&target,&minus);
                 print_frac(target);
-                printf("*row%i",curr_piv[0]);
+                printf("*row%i",curr_piv[0]+1);
             }
         }
         printf("\n");
     }
     print_divider(mat);
+    printf("|\nV\n");
 }
 
 void print_pivot(matrix_t * m,int row, int col) {
-    printf("pivot:\n");
-    print_frac(m[row][col]);
+    printf("pivot: ");
+    print_frac(m->matrix[row][col]);
     printf("\nat: row %i col %i\n",row+1,col+1);
 }
 
@@ -193,6 +194,74 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
     }
 }
 
+int isZeroRow(matrix_t* mat,int row) {
+    frac_t ** m = mat->matrix;
+    for(int j=0;j<mat->col;j++) {
+        if(m[row][j].n !=0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int getNonzero_rownum(matrix_t* mat) {
+    int nonzero_rows = 0;
+    for(int i=0;i<mat->row;i++) {
+        if(!isZeroRow(mat,i)) {
+            nonzero_rows++;
+        }
+    }
+    return nonzero_rows;
+}
+
+/**
+ * transforms matrix in gauss-Form into reduced-gauss-Form (Reduced Row Echelon Form)
+ * @param mat -> matrix in gauss-Form
+ */
+void reduced_gauss(matrix_t* mat) {
+    frac_t ** m = mat->matrix;
+    int nonzero_rownum = getNonzero_rownum(mat);
+
+    for(int curr_row = nonzero_rownum-1;
+    curr_row>=0;
+    curr_row--) {
+
+        int curr_piv[2] = {curr_row,0};
+        int pivot_col = 0;
+        //search for pivot
+        for(int j=0;j<mat->col;j++) {
+            if(m[curr_row][j].n != 0) {
+                break;
+            }
+            pivot_col++;
+        }
+        curr_piv[1] = pivot_col;
+
+        int* rows_computed = (int*) calloc(mat->row, sizeof (int));
+        for(int i=curr_row-1;i>=0;i--) {
+            if(m[i][pivot_col].n == 0) {
+                continue;
+            }
+            rows_computed[i] = 1;
+        }
+        printf("ROW ADDITION\n");
+        print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv);
+        free(rows_computed);
+
+        //compute rowAdd
+        for(int i=curr_row-1;i>=0;i--) {
+            if(m[i][pivot_col].n == 0) {
+                continue;
+            }
+            frac_t mult_const = m[i][pivot_col];
+            frac_t minus = {.n= -1, .m= 1};
+            fr_multiply(&mult_const,&minus);
+
+            rowAdd(mat,i,curr_row,mult_const);
+        }
+    }
+}
+
 void gauss(matrix_t* mat) {
     int piv[2] = {-1,-1};
     int curr_row = 0;
@@ -202,5 +271,7 @@ void gauss(matrix_t* mat) {
             curr_row++;
         }
     }
+    printf("reduced gauss (Reduced Row Echelon Form):\n");
+    reduced_gauss(mat);
     print_matrix(mat);
 }
