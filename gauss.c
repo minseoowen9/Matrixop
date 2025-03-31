@@ -13,6 +13,7 @@
 #define ROW_ADD 3
 
 int mode_state = INITIAL;
+int swap_num = 0;
 
 
 void swapRow(matrix_t* mat, int r1, int r2) {
@@ -117,6 +118,7 @@ void print_pivot(matrix_t * m,int row, int col) {
 }
 
 /**
+ * pass curr_piv = {-1,-1} and current_row = 0 initially
  * returns 0(END) if theres no more steps to compute, else macros defined above, which operation it has used
  * (for debug) logic: gauss_step is called when all of the element under curr_piv are zero and is about to operate the next step;
  * that is we are looking at a smaller matrix row:piv_row+1,...,row x col:piv_col+1,...,col
@@ -141,7 +143,7 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
     print_pivot(mat,piv_row,piv_col);
 
     if(current_row != piv_row) { //swap (when our current row has zero value at non-zero column)
-
+        swap_num++;
         mode_state = SWAP;
         rows_computed[current_row] = 1;
         rows_computed[piv_row] = 1;
@@ -271,7 +273,4 @@ void gauss(matrix_t* mat) {
             curr_row++;
         }
     }
-    printf("reduced gauss (Reduced Row Echelon Form):\n");
-    reduced_gauss(mat);
-    print_matrix(mat);
 }

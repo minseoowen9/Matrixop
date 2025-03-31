@@ -3,6 +3,7 @@
 #include <string.h>
 #include "Argumentparser.c"
 #include "gauss.h"
+#include "determinant.h"
 
 void mult_mode();
 void inv_mode();
@@ -133,11 +134,36 @@ void gauss_mode() {
     matrix_t* matrix = initialize_matrix(row,col,inputarr);
     printf("Gauß:\n");
     gauss(matrix);
+    printf("reduced gauss (Reduced Row Echelon Form):\n");
+    reduced_gauss(matrix);
+    print_matrix(matrix);
+    //reset global state variables
+    mode_state = INITIAL;
+    swap_num = 0;
     free_matrix(matrix);
 }
 
 void det_mode() {
-    printf("Coming soon!\n");
+    printf("input nxn matrix:\n");
+    int n = 0;
+
+    while(n <= 0) {
+        printf("input must be greater than zero\n");
+        printf("n:");
+        scanf("%i",&n);
+    }
+    getchar();
+
+    frac_t * inputarr = malloc(sizeof (frac_t)*n*n);
+
+    while(1) {
+        if(!read_matrix(inputarr,n,n)) {
+            break;
+        }
+    }
+    matrix_t* matrix = initialize_matrix(n,n,inputarr);
+    determinant(matrix);
+    free_matrix(matrix);
 }
 
 void inv_mode() {

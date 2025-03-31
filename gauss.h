@@ -6,10 +6,14 @@
 #define MATRIXOP_GAUSS_H
 
 #include "matrix.h"
+#define INITIAL -1
+#define END 0
 #define SWAP 1
 #define ROW_MULT 2
 #define ROW_ADD 3
-#define END 0
+
+int swap_num;
+int mode_state;
 
 void swapRow(matrix_t* mat, int r1, int r2);
 void rowAdd(matrix_t* mat, int dest_row,int mult_row, frac_t mult);
@@ -26,6 +30,7 @@ int find_NonZeroRow(matrix_t* mat, int col,int row_start);
 void find_nextpivot(matrix_t* mat, int curr_piv[2]);
 
 /**
+ * pass curr_piv = {-1,-1} and current_row = 0 initially
  * returns 0(END) if theres no more steps to compute, else macros defined above, which operation it has used
  * (for debug) logic: gauss_step is called when all of the element under curr_piv are zero and is about to operate the next step;
  * that is we are looking at a smaller matrix row:piv_row+1,...,row x col:piv_col+1,...,col
@@ -33,6 +38,12 @@ void find_nextpivot(matrix_t* mat, int curr_piv[2]);
  **/
 int gauss_step(matrix_t* mat, int curr_piv[],int current_row);
 void gauss(matrix_t* mat);
+
+/**
+ * transforms matrix in gauss-Form into reduced-gauss-Form (Reduced Row Echelon Form)
+ * @param mat -> matrix in gauss-Form
+ */
+void reduced_gauss(matrix_t* mat);
 
 
 #endif //MATRIXOP_GAUSS_H
