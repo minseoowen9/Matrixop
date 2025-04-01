@@ -12,9 +12,9 @@
  * matrix* m in gauss Form,
  * saved_mult: array of all saved multiplication constant during row normalization,
  * saved_multis: number of elements in saved_mult array
- * prints the calculation and its result
+ * prints and returns the calculation and its result
  * **/
-void print_det_step(matrix_t* m,frac_t* saved_mult,int saved_multis) {
+frac_t print_det_step(matrix_t* m,frac_t* saved_mult,int saved_multis) {
     frac_t result = {.n= (int) pow(-1,swap_num),.m=1};
     printf("Determinant = (-1)^(number of row swap operations) x all saved multiplying constant x product of all diagonal elements\n");
     printf("=\n( -1 )^%i",swap_num);
@@ -40,16 +40,17 @@ void print_det_step(matrix_t* m,frac_t* saved_mult,int saved_multis) {
     printf("= ");
     print_frac(result);
     printf("\n");
+    return (frac_t) {.n=result.n,.m=result.m};
 }
 
-void determinant(matrix_t* mat) {
+frac_t determinant(matrix_t* mat) {
     int piv[2] = {-1,-1};
     int curr_row = 0;
     int res = 0;
     int saveIndex = 0;
     frac_t * saved_mult = (frac_t*) calloc(mat->row,sizeof (frac_t));
 
-    while((res=gauss_step(mat,piv,curr_row)) != END) {
+    while((res=gauss_step(mat,piv,curr_row,NULL,NULL)) != END) {
         if(res == ROW_ADD) {
             curr_row++;
         }
@@ -61,10 +62,11 @@ void determinant(matrix_t* mat) {
         }
     }
     print_matrix(mat);
-    print_det_step(mat,saved_mult,saveIndex);
+    frac_t det = print_det_step(mat,saved_mult,saveIndex);
     free(saved_mult);
     //reset global state variable
     mode_state = INITIAL;
     swap_num = 0;
     curr_mult = (frac_t) {.n=1,.m=1};
+    return (frac_t) {.n=det.n,.m=det.m};
 }

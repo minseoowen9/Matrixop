@@ -36,15 +36,20 @@ void find_nextpivot(matrix_t* mat, int curr_piv[2]);
  * (for debug) logic: gauss_step is called when all of the element under curr_piv are zero and is about to operate the next step;
  * that is we are looking at a smaller matrix row:piv_row+1,...,row x col:piv_col+1,...,col
  * Also sets the current mode(global variable mode_state): INITIAL,SWAP,ROW_MULT,ROW_ADD for program logic and debugging
+ *
+ * @param toInverse-> matrix being inverted alongside mat. NULL if its not Matrix Inversion mode
+ * @param function pointer-> callback function for printing inversion matrix next to mat. NULL  if its not Matrix Inversion mode
  **/
-int gauss_step(matrix_t* mat, int curr_piv[],int current_row);
-void gauss(matrix_t* mat);
+int gauss_step(matrix_t* mat, int curr_piv[],int current_row,matrix_t* toInverse,void(*print_inverse)(matrix_t*,int));
+void gauss(matrix_t* mat,matrix_t* toInverse,void(*print_inverse)(matrix_t*,int));
 
 /**
  * transforms matrix in gauss-Form into reduced-gauss-Form (Reduced Row Echelon Form)
  * @param mat -> matrix in gauss-Form
+ * @param toInverse-> matrix being inverted alongside mat. NULL if its not Matrix Inversion mode
+ * @param function pointer-> callback function for printing inversion matrix next to mat. NULL  if its not Matrix Inversion mode
  */
-void reduced_gauss(matrix_t* mat);
+void reduced_gauss(matrix_t* mat,matrix_t* toInverse,void(*print_inverse)(matrix_t*,int));
 
 
 #endif //MATRIXOP_GAUSS_H

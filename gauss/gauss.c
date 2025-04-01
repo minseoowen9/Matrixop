@@ -76,7 +76,11 @@ void find_nextpivot(matrix_t* mat, int curr_piv[2]) {
     curr_piv[1] = -2;
 }
 
-void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_piv[]) {
+/**
+ * @param toInverse-> matrix being inverted alongside mat. NULL if its not Matrix Inversion mode
+ * @param function pointer-> callback function for printing inversion matrix next to mat. NULL  if its not Matrix Inversion mode
+ * **/
+void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_piv[],matrix_t* toInverse,void(*print_inverse)(matrix_t*,int)) {
     frac_t ** m = mat->matrix;
     int maxstrlen = get_maxstrlen(mat);
     for(int i=0;i<mat->row;i++) {
@@ -85,8 +89,12 @@ void print_gaussstep(matrix_t* mat,int rows_computed[],int mode,int const curr_p
             printAdditional_whitespaces(maxstrlen - frac_len(m[i][j]));
         }
         printf("| ");
-        if(rows_computed[i]) {
+        //print inverting matrix, if is not NULL
+        if(print_inverse) {
+            print_inverse(toInverse,i);
+        }
 
+        if(rows_computed[i]) {
             if(mode == SWAP) {
                 printf("<- swap");
             }
@@ -124,8 +132,11 @@ void print_pivot(matrix_t * m,int row, int col) {
  * (for debug) logic: gauss_step is called when all of the element under curr_piv are zero and is about to operate the next step;
  * that is we are looking at a smaller matrix row:piv_row+1,...,row x col:piv_col+1,...,col
  * Also sets the current mode(global variable mode_state): INITIAL,SWAP,ROW_MULT,ROW_ADD for program logic and debugging
+ *
+ * @param toInverse-> matrix being inverted alongside mat. NULL if its not Matrix Inversion mode
+ * @param function pointer-> callback function for printing inversion matrix next to mat. NULL  if its not Matrix Inversion mode
  **/
-int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
+int gauss_step(matrix_t* mat, int curr_piv[],int current_row, matrix_t* toInverse,void(*print_inverse)(matrix_t*,int)) {
 
     // do not look for the next pivot if swap or row normalization has taken place
     if(mode_state == ROW_ADD || mode_state == INITIAL) {
@@ -149,10 +160,13 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
         rows_computed[current_row] = 1;
         rows_computed[piv_row] = 1;
         printf("ROW SWAP\n");
-        print_gaussstep(mat,rows_computed,SWAP,curr_piv);
+        print_gaussstep(mat,rows_computed,SWAP,curr_piv,toInverse,print_inverse);
         free(rows_computed);
         //compute matrix
         swapRow(mat,current_row,piv_row);
+        if(toInverse) {
+            swapRow(toInverse,current_row,piv_row);
+        }
         //the row of the current pivot element must be changed to the current row since these two rows are swapped
         curr_piv[0] = current_row;
 
@@ -162,9 +176,12 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
         mode_state = ROW_MULT;
         rows_computed[piv_row] = 1;
         printf("ROW MULT\n");
-        print_gaussstep(mat,rows_computed,ROW_MULT,curr_piv);
+        print_gaussstep(mat,rows_computed,ROW_MULT,curr_piv,toInverse,print_inverse);
         free(rows_computed);
         //compute matrix
+        if(toInverse) {
+            row_product(toInverse,piv_row,(frac_t) {.n= m[piv_row][piv_col].m, .m= m[piv_row][piv_col].n});
+        }
         row_product(mat,piv_row,(frac_t) {.n= m[piv_row][piv_col].m, .m= m[piv_row][piv_col].n});
 
         return ROW_MULT;
@@ -179,7 +196,7 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
             rows_computed[i] = 1;
         }
         printf("ROW ADDITION\n");
-        print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv);
+        print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv,toInverse,print_inverse);
         free(rows_computed);
 
         //compute rowAdd
@@ -190,6 +207,9 @@ int gauss_step(matrix_t* mat, int curr_piv[],int current_row) {
             frac_t mult_const = m[i][piv_col];
             fr_multiply(&mult_const,(frac_t){.n= -1, .m= 1});
 
+            if(toInverse) {
+                rowAdd(toInverse,i,piv_row,mult_const);
+            }
             rowAdd(mat,i,piv_row,mult_const);
         }
         return ROW_ADD;
@@ -219,8 +239,10 @@ int getNonzero_rownum(matrix_t* mat) {
 /**
  * transforms matrix in gauss-Form into reduced-gauss-Form (Reduced Row Echelon Form)
  * @param mat -> matrix in gauss-Form
+ * @param toInverse-> matrix being inverted alongside mat. NULL if its not Matrix Inversion mode
+ * @param function pointer-> callback function for printing inversion matrix next to mat. NULL  if its not Matrix Inversion mode
  */
-void reduced_gauss(matrix_t* mat) {
+void reduced_gauss(matrix_t* mat,matrix_t* toInverse,void(*print_inverse)(matrix_t*,int)) {
     frac_t ** m = mat->matrix;
     int nonzero_rownum = getNonzero_rownum(mat);
 
@@ -247,7 +269,7 @@ void reduced_gauss(matrix_t* mat) {
             rows_computed[i] = 1;
         }
         printf("ROW ADDITION\n");
-        print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv);
+        print_gaussstep(mat,rows_computed,ROW_ADD,curr_piv,toInverse,print_inverse);
         free(rows_computed);
 
         //compute rowAdd
@@ -258,16 +280,19 @@ void reduced_gauss(matrix_t* mat) {
             frac_t mult_const = m[i][pivot_col];
             fr_multiply(&mult_const,(frac_t) {.n= -1, .m= 1});
 
+            if(toInverse) {
+                rowAdd(toInverse,i,curr_row,mult_const);
+            }
             rowAdd(mat,i,curr_row,mult_const);
         }
     }
 }
 
-void gauss(matrix_t* mat) {
+void gauss(matrix_t* mat,matrix_t* toInverse,void(*print_inverse)(matrix_t*,int)) {
     int piv[2] = {-1,-1};
     int curr_row = 0;
     int res = 0;
-    while((res=gauss_step(mat,piv,curr_row)) != END) {
+    while((res=gauss_step(mat,piv,curr_row,toInverse,print_inverse)) != END) {
         if(res == ROW_ADD) {
             curr_row++;
         }

@@ -4,9 +4,10 @@ projectname = matrixop
 OBJS = determinant/determinant.o \
             gauss/gauss.o \
             output/output.o output/Argumentparser.o \
-            types/fraction.o types/matrix.o
+            types/fraction.o types/matrix.o \
+            inverse/inverse.o
 
-DIR_NAME = determinant gauss output types
+DIR_NAME = determinant gauss output types inverse
 
 all: $(projectname) $(DIR_NAME)
 

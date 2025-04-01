@@ -7,6 +7,6 @@
 
 #include "../gauss/gauss.h"
 
-void determinant(matrix_t* mat);
+frac_t determinant(matrix_t* mat);
 
 #endif //MATRIXOP_DETERMINANT_H

@@ -4,6 +4,7 @@
 #include "output/Argumentparser.h"
 #include "gauss/gauss.h"
 #include "determinant/determinant.h"
+#include "inverse/inverse.h"
 
 void mult_mode();
 void inv_mode();
@@ -133,9 +134,9 @@ void gauss_mode() {
     }
     matrix_t* matrix = initialize_matrix(row,col,inputarr);
     printf("Gauß:\n");
-    gauss(matrix);
+    gauss(matrix,NULL,NULL);
     printf("reduced gauss (Reduced Row Echelon Form):\n");
-    reduced_gauss(matrix);
+    reduced_gauss(matrix,NULL,NULL);
     print_matrix(matrix);
     //reset global state variables
     mode_state = INITIAL;
@@ -167,5 +168,40 @@ void det_mode() {
 }
 
 void inv_mode() {
-    printf("Coming soon!\n");
+    printf("Matrix Inversion selected. Input nxn matrix:\n");
+    int n = 0;
+
+    while(n <= 0) {
+        printf("input must be greater than zero\n");
+        printf("n:");
+        scanf("%i",&n);
+    }
+    getchar();
+
+    frac_t * inputarr = malloc(sizeof (frac_t)*n*n);
+
+    while(1) {
+        if(!read_matrix(inputarr,n,n)) {
+            break;
+        }
+    }
+    matrix_t* test_matrix = initialize_matrix(n,n,inputarr);
+    frac_t det = determinant(test_matrix);
+    free_matrix(test_matrix);
+    if(det.n == 0) {
+        printf("det(A)=0 => cannot be inversed!\n\n");
+        return;
+    }
+    matrix_t* matrix = initialize_matrix(n,n,inputarr);
+    matrix_t* i_matrix = initialize_I_matrix(n);
+
+    gauss(matrix,i_matrix,&print_inverse_callback);
+    printf("reduced gauss (Reduced Row Echelon Form):\n");
+    reduced_gauss(matrix,i_matrix,&print_inverse_callback);
+
+    printf("inversed matrix:\n");
+    print_matrix(i_matrix);
+
+    free_matrix(i_matrix);
+    free_matrix(matrix);
 }
