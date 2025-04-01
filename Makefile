@@ -8,6 +8,8 @@ OBJS = determinant/determinant.o \
             inverse/inverse.o
 
 DIR_NAME = determinant gauss output types inverse
+TEST_DIR = inputdatas
+TESTFILES := $(wildcard $(TEST_DIR)/*)
 
 all: $(projectname) $(DIR_NAME)
 
@@ -16,6 +18,12 @@ $(projectname): main.o $(OBJS)
 
 $(OBJS):
 	for dir in $(DIR_NAME); do $(MAKE) -C $$dir; done
+
+test: $(projectname)
+	@echo "running tests inputs..."
+	@$(foreach file, $(TESTFILES), ./$(projectname) < $(file);)
+
+
 
 .PHONY : clean
 clean:
