@@ -56,5 +56,5 @@ int frac_len(frac_t fr) {
     } else if(fr.m == 1) { // 100/1 => 100
         return strlen(n);
     }
-    return strlen(n) + strlen(m) + 1; // the fraction is represented in a/b, adding length for '/'
+    return strlen(n) + strlen(m) + 1; // the types is represented in a/b, adding length for '/'
 }

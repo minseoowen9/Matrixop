@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Argumentparser.c"
-#include "gauss.h"
-#include "determinant.h"
+#include "output/Argumentparser.h"
+#include "gauss/gauss.h"
+#include "determinant/determinant.h"
 
 void mult_mode();
 void inv_mode();

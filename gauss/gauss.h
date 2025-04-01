@@ -5,7 +5,7 @@
 #ifndef MATRIXOP_GAUSS_H
 #define MATRIXOP_GAUSS_H
 
-#include "matrix.h"
+#include "../types/matrix.h"
 #define INITIAL -1
 #define END 0
 #define SWAP 1

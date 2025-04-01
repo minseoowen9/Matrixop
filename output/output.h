@@ -5,7 +5,7 @@
 #ifndef MATRIXOP_OUTPUT_H
 #define MATRIXOP_OUTPUT_H
 
-#include "matrix.h"
+#include "../types/matrix.h"
 
 int get_maxstrlen(matrix_t* mat);
 void printAdditional_whitespaces(int x);

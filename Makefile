@@ -1,14 +1,23 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g
+include ./Makefile.config
 
-all: matrixop
+projectname = matrixop
+OBJS = determinant/determinant.o \
+            gauss/gauss.o \
+            output/output.o output/Argumentparser.o \
+            types/fraction.o types/matrix.o
 
-matrixop: main.o fraction.o matrix.o output.o gauss.o determinant.o
+DIR_NAME = determinant gauss output types
+
+all: $(projectname) $(DIR_NAME)
+
+$(projectname): main.o $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
 
-%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(OBJS):
+	for dir in $(DIR_NAME); do $(MAKE) -C $$dir; done
 
+.PHONY : clean
 clean:
-	rm -f *.o matrixop
+	for dir in $(DIR_NAME); do $(MAKE) -C $$dir clean; done
+	rm -f *.o $(projectname)
 

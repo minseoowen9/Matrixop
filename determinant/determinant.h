@@ -5,7 +5,7 @@
 #ifndef MATRIXOP_DETERMINANT_H
 #define MATRIXOP_DETERMINANT_H
 
-#include "gauss.h"
+#include "../gauss/gauss.h"
 
 void determinant(matrix_t* mat);
 

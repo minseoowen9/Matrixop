@@ -2,7 +2,7 @@
 // Created by Minseo Kim on 3/28/25.
 //
 #include "gauss.h"
-#include "output.h"
+#include "../output/output.h"
 #include <stdio.h>
 #include <stdlib.h>
 

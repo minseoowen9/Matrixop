@@ -6,7 +6,7 @@
 #include <string.h>
 #include "matrix.h"
 #include "fraction.h"
-#include "output.h"
+#include "../output/output.h"
 
 /**
 returns HEAP, matrix[] => if mxn matrix, it should go like:

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "fraction.h"
+#include "../types/fraction.h"
 #include <regex.h>
 
 int isNumber(char* str) {
@@ -67,7 +67,7 @@ int read_matrix(frac_t* matrix, int row, int col) {
         while (token) {
             read_col++;
             if(parseFraction(&matrix[index],token)) {
-                printf("not in number or in fraction. Check if denominator is non-zero\n");
+                printf("not in number or in types. Check if denominator is non-zero\n");
                 return 1;
             }
             index++;
